@@ -4,8 +4,8 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/Trial97/sflags"
 	"github.com/alecthomas/kingpin"
-	"github.com/octago/sflags"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

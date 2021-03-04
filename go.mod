@@ -1,4 +1,4 @@
-module github.com/octago/sflags
+module github.com/Trial97/sflags
 
 go 1.14
 

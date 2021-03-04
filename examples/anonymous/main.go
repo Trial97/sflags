@@ -9,8 +9,8 @@ import (
 	"log"
 	"os"
 
+	"github.com/Trial97/sflags/gen/gflag"
 	"github.com/davecgh/go-spew/spew"
-	"github.com/octago/sflags/gen/gflag"
 )
 
 type httpConfig struct {
