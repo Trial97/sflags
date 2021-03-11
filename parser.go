@@ -205,6 +205,8 @@ func parseVal(value reflect.Value, optFuncs ...OptFunc) ([]*Flag, Value) {
 	case reflect.Struct:
 		flags := parseStruct(value, optFuncs...)
 		return flags, nil
+	case reflect.Array, reflect.Slice:
+		return nil, newSliceValue(value)
 	case reflect.Map:
 		mapType := value.Type()
 		keyKind := value.Type().Key().Kind()
@@ -223,6 +225,7 @@ func parseVal(value reflect.Value, optFuncs ...OptFunc) ([]*Flag, Value) {
 		if val != nil {
 			return nil, val
 		}
+		return nil, newStringMapValue(value)
 	}
 	return nil, nil
 }
