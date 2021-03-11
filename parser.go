@@ -30,6 +30,7 @@ type opts struct {
 	envDivider  string
 	flatten     bool
 	validator   ValidateFunc
+	toFlag      func(string, string) string
 }
 
 func (o opts) apply(optFuncs ...OptFunc) opts {
@@ -69,6 +70,9 @@ func Validator(val ValidateFunc) OptFunc { return func(opt *opts) { opt.validato
 // Set to false if you don't want anonymous structure fields to be flatten.
 func Flatten(val bool) OptFunc { return func(opt *opts) { opt.flatten = val } }
 
+// ToFlag sets the to function to compose flag name
+func ToFlag(val func(string, string) string) OptFunc { return func(opt *opts) { opt.toFlag = val } }
+
 func copyOpts(val opts) OptFunc { return func(opt *opts) { *opt = val } }
 
 func hasOption(options []string, option string) bool {
@@ -87,13 +91,14 @@ func defOpts() opts {
 		flagDivider: defaultFlagDivider,
 		envDivider:  defaultEnvDivider,
 		flatten:     defaultFlatten,
+		toFlag:      camelToFlag,
 	}
 }
 
 func parseFlagTag(field reflect.StructField, opt opts) *Flag {
 	flag := Flag{}
 	ignoreFlagPrefix := false
-	flag.Name = camelToFlag(field.Name, opt.flagDivider)
+	flag.Name = opt.toFlag(field.Name, opt.flagDivider)
 	if flagTags := strings.Split(field.Tag.Get(opt.flagTag), ","); len(flagTags) > 0 {
 		switch fName := flagTags[0]; fName {
 		case "-":
